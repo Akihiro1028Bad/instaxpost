@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ソーシャルメディア自動投稿アプリ</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>ソーシャルメディア自動投稿アプリ</h1>
+    <button id="start-button">開始</button>
+    <button id="stop-button" style="display: none;">停止</button>
+    <div id="status"></div>
+
+    <script>
+        $(document).ready(function() {
+            var socket = io();
+
+            $('#start-button').on('click', function() {
+                socket.emit('start_posting');
+                $('#start-button').hide();
+                $('#stop-button').show();
+            });
+
+            $('#stop-button').on('click', function() {
+                socket.emit('stop_posting');
+                $('#stop-button').hide();
+                $('#start-button').show();
+            });
+
+            socket.on('status', function(data) {
+                $('#status').append('<p>' + data.message + '</p>');
+            });
+        });
+    </script>
+</body>
+</html>
